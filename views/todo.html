@@ -1,0 +1,56 @@
+    <header class="header">
+      <h1>todos</h1>
+  
+      <!-- 2.添加任务 -->
+      <form ng-submit="add()">
+        <input class="new-todo" placeholder="What needs to be done?" autofocus ng-model="newTask">
+      </form>
+    </header>
+    <!-- This section should be hidden by default and shown when there are todos -->
+    <section class="main">
+  
+      <!-- 5.切换选中状态 -->
+      <input class="toggle-all" type="checkbox" ng-model="allChecked" ng-change="checkAll()">
+      <label for="toggle-all">Mark all as complete</label>
+      <ul class="todo-list">
+        <!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
+  
+       <!--  4.修改任务 ng-repeat优先级高于ng-class -->
+        <li ng-class="{completed: task.isCompleted, editing: task.id === editId}" ng-repeat= "task in taskList | filter: selectedStatus track by $index">
+          <div class="view">
+            <input class="toggle" type="checkbox" ng-model="task.isCompleted" ng-change="checkToggle()">
+            <label ng-bind="task.name" ng-dblclick="edit(task.id)"></label>
+  
+            <!-- 3.根据 id 删除数据 -->
+            <button class="destroy" ng-click="remove(task.id)"></button>
+          </div>
+          <form ng-submit="update()">
+            <input class="edit" ng-model="task.name">
+          </form>
+        </li>
+      </ul>
+    </section>
+    <!-- This footer should hidden by default and shown when there are todos -->
+    <footer class="footer">
+  
+      <!-- This should be `0 items left` by default -->
+      <!-- 7.显示未完成任务数 -->
+      <span class="todo-count"><strong ng-bind="getUnCompleted()"></strong> item left</span>
+      <!-- Remove this if you don't implement routing -->
+      <ul class="filters">
+        <li>
+          <!-- 8.9 -->
+          <a ng-class="{selected: selectedStatus.isCompleted === undefined}" href="#/">All</a>
+        </li>
+        <li>
+          <a ng-class="{selected: selectedStatus.isCompleted === false}" href="#/active">Active</a>
+        </li>
+        <li>
+          <a ng-class="{selected: selectedStatus.isCompleted === true}" href="#/completed">Completed</a>
+        </li>
+      </ul>
+      
+      <!-- Hidden if no completed items are left ↓ -->
+      <!-- 6.清除已完成任务 -->
+      <button class="clear-completed" ng-click="clearAll()" ng-show="isShow()">Clear completed</button>
+    </footer>
